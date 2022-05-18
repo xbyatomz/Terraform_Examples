@@ -3,7 +3,7 @@ resource "aws_placement_group" "exmaple_placement_group" {
   strategy = "cluster"
 }
 
-resource "aws_autoscaling_group" "bar" {
+resource "aws_autoscaling_group" "example_auto_scaling_group" {
   name                      = "example_terraform_asg"
   max_size                  = 3
   min_size                  = 1
@@ -11,7 +11,14 @@ resource "aws_autoscaling_group" "bar" {
   health_check_type         = "ELB"
   desired_capacity          = 1
   force_delete              = true
-  placement_group           = aws_placement_group.exmaple_placement_group.id
-  launch_configuration      = aws_launch_configuration.foobar.name
-  vpc_zone_identifier       = [aws_subnet.example1.id, aws_subnet.example2.id]
+
+  launch_template {
+    id = "${aws_launch_template.example_launch_template.id}"
+    version = "${aws_launch_template.example_launch_template.latest_version}"
+  }
+  vpc_zone_identifier = [ "${aws_subnet.private_subnet_1a.id}" ]
+
+  depends_on = [
+    aws_launch_template.example_launch_template
+  ]
 }
