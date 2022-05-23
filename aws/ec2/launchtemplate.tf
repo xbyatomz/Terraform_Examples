@@ -7,7 +7,7 @@ resource "aws_launch_template" "example_launch_template" {
 
   disable_api_termination = false
 
-  ebs_optimized = true
+  ebs_optimized = false
 
   image_id = "ami-00c90dbdc12232b58"
 
@@ -16,10 +16,10 @@ resource "aws_launch_template" "example_launch_template" {
   instance_type = "t2.micro"
 
   metadata_options {
-    http_endpoint               = "enabled"
-    http_tokens                 = "required"
+    http_endpoint = "enabled"
+    http_tokens = "required"
     http_put_response_hop_limit = 1
-    instance_metadata_tags      = "enabled"
+    instance_metadata_tags = "enabled"
   }
 
   monitoring {
@@ -44,5 +44,5 @@ resource "aws_launch_template" "example_launch_template" {
     }
   }
 
-#   user_data = filebase64("${path.module}/example.sh")
+  user_data = filebase64("${path.module}/user_data.sh")
 }
